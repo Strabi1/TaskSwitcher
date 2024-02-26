@@ -4,7 +4,9 @@ import * as path from 'path';
 
 export function activate(context: vscode.ExtensionContext) {
 
+	// =========================================
 	// Check and create .vscode folder
+	// =========================================
 	let vsCodeFolder = "";
 
 	try {
@@ -20,6 +22,9 @@ export function activate(context: vscode.ExtensionContext) {
 	const bpFile = path.join(vsCodeFolder, 'breakpoints.json');
 
 	context.subscriptions.push(
+		// =========================================
+		// Export breakpoints
+		// =========================================
 		vscode.commands.registerCommand('extension.exportBreakpoints', () => {
 			const breakpoints = vscode.debug.breakpoints;
 			const breakpointsData = breakpoints.map(bp => {
@@ -32,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 					};
 				}
 			}).filter(Boolean);
-	
+			
 			fs.writeFile(bpFile, JSON.stringify(breakpointsData, null, 2), (err) => {
 				if (err) {
 					vscode.window.showErrorMessage('Error exporting breakpoints: ' + err.message);
@@ -40,7 +45,10 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			});
 		}),
-
+		
+		// =========================================
+		// Import breakpoints
+		// =========================================
 		vscode.commands.registerCommand('extension.importBreakpoints', async () => {
 			fs.readFile(bpFile, { encoding: 'utf8' }, async (err, data) => {
 				if (err) {
@@ -58,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.debug.addBreakpoints(breakpoints);
 					vscode.window.showInformationMessage('Breakpoints imported successfully.');
 				} catch (error: any) {
-					vscode.window.showErrorMessage(`Error parsing breakpoints JSON:  ${error.message}`);
+					vscode.window.showErrorMessage(`Error parsing breakpoints JSON: ${error.message}`);
 				}
 			});
 		})
