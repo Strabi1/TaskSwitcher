@@ -16,6 +16,10 @@
 			{
 				"command": "extension.exportBreakpoints",
 				"title": "Export Breakpoints"
+			},
+			{
+				"command": "extension.importBreakpoints",
+				"title": "Import Breakpoints"
 			}
 		]
 	},
