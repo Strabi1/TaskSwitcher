@@ -1,26 +1,31 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	let disposable = vscode.commands.registerCommand('extension.exportBreakpoints', () => {
+		const breakpoints = vscode.debug.breakpoints;
+		const breakpointsData = breakpoints.map(bp => {
+			if (bp instanceof vscode.SourceBreakpoint) {
+				return {
+					path: bp.location.uri.fsPath,
+					line: bp.location.range.start.line,
+					enabled: bp.enabled,
+					condition: bp.condition
+				};
+			}
+		}).filter(Boolean);
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "taskswitcher" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('taskswitcher.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from TaskSwitcher!');
+		const filePath = path.join(vscode.workspace.rootPath || '', 'breakpoints.json');
+		fs.writeFile(filePath, JSON.stringify(breakpointsData, null, 2), (err) => {
+			if (err) {
+				vscode.window.showErrorMessage('Error exporting breakpoints: ' + err.message);
+				return;
+			}
+		});
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}
