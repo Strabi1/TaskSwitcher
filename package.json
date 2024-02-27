@@ -9,6 +9,10 @@
 	"categories": [
 		"Other"
 	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Strabi1/TaskSwitcher"
+	},
 	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
