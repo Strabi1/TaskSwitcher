@@ -25,6 +25,8 @@ export class Tasks {
 	}
 
 	getTasks(): Task[] {
+		// Reload file in case the file was modified manually
+		this.updateTasks();
 		return this.tasks;
 	}
 
