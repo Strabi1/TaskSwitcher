@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
  
 	} catch { vscode.window.showErrorMessage('No workspace is open! Please open a workspace or folder!'); return; }
 
-	const bpFile = path.join(vsCodeFolder, 'breakpoints.json');
+	const bpFile = path.join(vsCodeFolder, 'myTasks.json');
 	const myTasks = new tasks.Tasks(bpFile);
 
 	context.subscriptions.push(

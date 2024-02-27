@@ -41,7 +41,7 @@ export class Tasks {
 				this.tasks = JSON.parse(filteredString.join('\n'));
 			}
 			catch (error: any) {
-				vscode.window.showErrorMessage(`Error parsing breakpoints JSON: ${error.message}`);
+				vscode.window.showErrorMessage(`Error parsing the JSON file: ${error.message}`);
 				this.tasks = [];
 			}
 		}
@@ -102,7 +102,7 @@ export class Tasks {
 
 			fs.writeFileSync(this.jsonPath, jsonString, 'utf-8');
 		} catch (error: any) {
-			vscode.window.showErrorMessage(`Error write breakpoints JSON: ${error.message}`);
+			vscode.window.showErrorMessage(`Error write the JSON file: ${error.message}`);
 		}
 	}
 }
