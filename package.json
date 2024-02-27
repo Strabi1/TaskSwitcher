@@ -20,6 +20,10 @@
 			{
 				"command": "extension.importBreakpoints",
 				"title": "Import Breakpoints"
+			},
+			{
+				"command": "extension.createNewTask",
+				"title": "Create new task"
 			}
 		]
 	},

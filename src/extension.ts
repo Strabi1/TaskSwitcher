@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as tasks from './task'
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -20,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 	} catch { vscode.window.showErrorMessage('No workspace is open! Please open a workspace or folder!'); return; }
 
 	const bpFile = path.join(vsCodeFolder, 'breakpoints.json');
+	const myTasks = new tasks.Tasks(bpFile);
 
 	context.subscriptions.push(
 		// =========================================
@@ -55,13 +57,13 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showErrorMessage('Error importing breakpoints: ' + err.message);
 					return;
 				}
-	
+				
 				try {
 					const breakpointsData = JSON.parse(data);
 					const breakpoints = breakpointsData.map((bp: any) => {
 						return new vscode.SourceBreakpoint(new vscode.Location(vscode.Uri.file(bp.path), new vscode.Position(bp.line, 0)), bp.enabled);
 					});
-	
+					
 					vscode.debug.removeBreakpoints(vscode.debug.breakpoints);
 					vscode.debug.addBreakpoints(breakpoints);
 					vscode.window.showInformationMessage('Breakpoints imported successfully.');
@@ -69,8 +71,17 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showErrorMessage(`Error parsing breakpoints JSON: ${error.message}`);
 				}
 			});
-		})
+		}),
+		
+		vscode.commands.registerCommand('extension.createNewTask', async () => {
+			const userInput = await vscode.window.showInputBox({
+				prompt: 'Enter the name of the task!',
+				placeHolder: 'Task name'
+			});
 
+			if (userInput)
+				myTasks.createNewTask(userInput);
+		})
 	);
 }
 
