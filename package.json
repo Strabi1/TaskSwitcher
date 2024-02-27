@@ -2,9 +2,9 @@
 	"name": "taskswitcher",
 	"displayName": "TaskSwitcher",
 	"description": "",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"engines": {
-		"vscode": "^1.86.0"
+		"vscode": "^1.42.0"
 	},
 	"categories": [
 		"Other"
@@ -44,7 +44,7 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.86.0",
+		"@types/vscode": "^1.42.0",
 		"@types/mocha": "^10.0.2",
 		"@types/node": "18.x",
 		"@typescript-eslint/eslint-plugin": "^6.7.3",
