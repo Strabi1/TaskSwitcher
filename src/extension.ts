@@ -28,15 +28,13 @@ export function activate(context: vscode.ExtensionContext) {
 		// Export breakpoints
 		// =========================================
 		vscode.commands.registerCommand('extension.exportBreakpoints', async() => {
-			const picks = myTasks.getTasks().map(task => ({ label: task.task })); // Konvertálja a feladatokat QuickPickItem-ekké
+			const picks = myTasks.getTasks().map(task => ({ label: task.task }));
 
 			const selected = await vscode.window.showQuickPick(picks, {
 				placeHolder: 'Choose a task',
 			});
 	
 			if (selected) {
-				vscode.window.showInformationMessage(`You selected: ${selected.label}`);
-
 				const breakpoints = vscode.debug.breakpoints;
 				const breakpointsData = breakpoints.map(bp => {
 					if (bp instanceof vscode.SourceBreakpoint) {
@@ -51,8 +49,6 @@ export function activate(context: vscode.ExtensionContext) {
 						return breakpoint;
 						
 					} 
-					// else
-					// 	return [];
 				}).filter(Boolean);
 
 				myTasks.exportBreakPoints(selected.label, breakpointsData) 
@@ -63,27 +59,30 @@ export function activate(context: vscode.ExtensionContext) {
 		// Import breakpoints
 		// =========================================
 		vscode.commands.registerCommand('extension.importBreakpoints', async () => {
-			fs.readFile(bpFile, { encoding: 'utf8' }, async (err, data) => {
-				if (err) {
-					vscode.window.showErrorMessage('Error importing breakpoints: ' + err.message);
-					return;
-				}
+			const picks = myTasks.getTasks().map(task => ({ label: task.task }));
+
+			const selected = await vscode.window.showQuickPick(picks, {
+				placeHolder: 'Choose a task',
+			});
+	
+			if (selected) {
+				const breakp = myTasks.importBreakPoint(selected.label);
+
+				const breakpoints = breakp?.map((bp: any) => {
+					return new vscode.SourceBreakpoint(new vscode.Location(vscode.Uri.file(bp.path), new vscode.Position(bp.line, 0)), bp.enabled);
+				});
 				
-				try {
-					const breakpointsData = JSON.parse(data);
-					const breakpoints = breakpointsData.map((bp: any) => {
-						return new vscode.SourceBreakpoint(new vscode.Location(vscode.Uri.file(bp.path), new vscode.Position(bp.line, 0)), bp.enabled);
-					});
-					
+				if(breakpoints) {
 					vscode.debug.removeBreakpoints(vscode.debug.breakpoints);
 					vscode.debug.addBreakpoints(breakpoints);
 					vscode.window.showInformationMessage('Breakpoints imported successfully.');
-				} catch (error: any) {
-					vscode.window.showErrorMessage(`Error parsing breakpoints JSON: ${error.message}`);
 				}
-			});
+			}
 		}),
 		
+		// =========================================
+		// Create new task
+		// =========================================
 		vscode.commands.registerCommand('extension.createNewTask', async () => {
 			const userInput = await vscode.window.showInputBox({
 				prompt: 'Enter the name of the task!',

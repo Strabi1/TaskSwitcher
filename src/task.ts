@@ -79,6 +79,13 @@ export class Tasks {
 		this.writeTasksToFile();
 	}
 
+	importBreakPoint(taskName: string): Breakpoint[] | undefined {
+		const taskIndex = this.tasks.findIndex(task => task.task === taskName);
+
+		if (taskIndex !== -1) 
+			return this.tasks[taskIndex].breakPoints;
+	}
+
 	taskExists(taskName: string): boolean {
 		return this.tasks.some(task => task.task === taskName);
 	}
