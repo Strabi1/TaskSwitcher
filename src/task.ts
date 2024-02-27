@@ -5,8 +5,8 @@ import * as path from 'path';
 
 export type Breakpoint = {
 	path: string,
-	line: string,
-	enabled: string,
+	line: number,
+	enabled: boolean,
 	condition: string
 }
 
@@ -24,12 +24,11 @@ export class Tasks {
 		this.updateTasks();
 	}
 
-	updateTasks(): void {
-		// try {
-		// 	const filteredString = fs.readFileSync(this.jsonPath, 'utf8').split('\n').filter(line => !line.trim().startsWith('//'));
-		// 	this.tasks = JSON.parse(filteredString.join('\n'));
-		// } catch (error: any) { vscode.window.showErrorMessage(`Error parsing breakpoints JSON: ${error.message}`); }
+	getTasks(): Task[] {
+		return this.tasks;
+	}
 
+	updateTasks(): void {
 		try { 
 			let jsonString = fs.readFileSync(this.jsonPath, 'utf-8');
 			let workspacePath = vscode.workspace.workspaceFolders![0].uri.fsPath;
@@ -70,6 +69,16 @@ export class Tasks {
 		}
 	}
 
+	exportBreakPoints(taskName: string, breakPoints: Breakpoint[] | any) {
+		const taskIndex = this.tasks.findIndex(task => task.task === taskName);
+
+		if (taskIndex !== -1) 
+			this.tasks[taskIndex].breakPoints = breakPoints;
+
+
+		this.writeTasksToFile();
+	}
+
 	taskExists(taskName: string): boolean {
 		return this.tasks.some(task => task.task === taskName);
 	}
@@ -89,5 +98,4 @@ export class Tasks {
 			vscode.window.showErrorMessage(`Error write breakpoints JSON: ${error.message}`);
 		}
 	}
-
 }

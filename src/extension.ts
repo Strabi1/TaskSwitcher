@@ -27,25 +27,36 @@ export function activate(context: vscode.ExtensionContext) {
 		// =========================================
 		// Export breakpoints
 		// =========================================
-		vscode.commands.registerCommand('extension.exportBreakpoints', () => {
-			const breakpoints = vscode.debug.breakpoints;
-			const breakpointsData = breakpoints.map(bp => {
-				if (bp instanceof vscode.SourceBreakpoint) {
-					return {
-						path: bp.location.uri.fsPath,
-						line: bp.location.range.start.line,
-						enabled: bp.enabled,
-						condition: bp.condition
-					};
-				}
-			}).filter(Boolean);
-			
-			fs.writeFile(bpFile, JSON.stringify(breakpointsData, null, 2), (err) => {
-				if (err) {
-					vscode.window.showErrorMessage('Error exporting breakpoints: ' + err.message);
-					return;
-				}
+		vscode.commands.registerCommand('extension.exportBreakpoints', async() => {
+			const picks = myTasks.getTasks().map(task => ({ label: task.task })); // Konvertálja a feladatokat QuickPickItem-ekké
+
+			const selected = await vscode.window.showQuickPick(picks, {
+				placeHolder: 'Choose a task',
 			});
+	
+			if (selected) {
+				vscode.window.showInformationMessage(`You selected: ${selected.label}`);
+
+				const breakpoints = vscode.debug.breakpoints;
+				const breakpointsData = breakpoints.map(bp => {
+					if (bp instanceof vscode.SourceBreakpoint) {
+					
+						let breakpoint: tasks.Breakpoint = {
+							path: bp.location.uri.fsPath,
+							line: bp.location.range.start.line,
+							enabled: bp.enabled,
+							condition: bp.condition ? bp.condition : ''
+						};
+
+						return breakpoint;
+						
+					} 
+					// else
+					// 	return [];
+				}).filter(Boolean);
+
+				myTasks.exportBreakPoints(selected.label, breakpointsData) 
+			}
 		}),
 		
 		// =========================================
