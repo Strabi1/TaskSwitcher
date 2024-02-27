@@ -23,7 +23,11 @@
 			},
 			{
 				"command": "extension.createNewTask",
-				"title": "Create new task"
+				"title": "Create New Task"
+			},
+			{
+				"command": "extension.deleteTask",
+				"title": "Delete Task"
 			}
 		]
 	},

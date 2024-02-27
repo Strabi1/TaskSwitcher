@@ -71,6 +71,15 @@ export class Tasks {
 		}
 	}
 
+	deleteTask(taskName: string) {
+		const taskIndex = this.tasks.findIndex(task => task.task === taskName);
+
+		if (taskIndex !== -1) {
+			this.tasks.splice(taskIndex, 1);
+			this.writeTasksToFile();
+		}
+	}
+
 	exportBreakPoints(taskName: string, breakPoints: Breakpoint[] | any) {
 		const taskIndex = this.tasks.findIndex(task => task.task === taskName);
 

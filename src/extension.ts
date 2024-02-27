@@ -47,7 +47,6 @@ export function activate(context: vscode.ExtensionContext) {
 						};
 
 						return breakpoint;
-						
 					} 
 				}).filter(Boolean);
 
@@ -88,9 +87,28 @@ export function activate(context: vscode.ExtensionContext) {
 				prompt: 'Enter the name of the task!',
 				placeHolder: 'Task name'
 			});
-
+			
 			if (userInput)
-				myTasks.createNewTask(userInput);
+			myTasks.createNewTask(userInput);
+		}),
+
+		// =========================================
+		// Delete task
+		// =========================================
+		vscode.commands.registerCommand('extension.deleteTask', async () => {
+			const picks = myTasks.getTasks().map(task => ({ label: task.task }));
+
+			const selected = await vscode.window.showQuickPick(picks, {
+				placeHolder: 'Deleted task',
+			});
+
+			if (selected) {
+				const result = await vscode.window.showInformationMessage(
+					'Are you sure you want to delete task?', { modal: true }, 'Yes');
+					
+					if (result === 'Yes')
+						myTasks.deleteTask(selected.label);
+			}
 		})
 	);
 }
