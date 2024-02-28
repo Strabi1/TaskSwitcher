@@ -116,6 +116,9 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showErrorMessage(`Error importing windows: ${error.message}`);
 					return;
 				}
+
+				await vscode.commands.executeCommand('workbench.action.closeAllEditors');
+
 				try {
 					const editorLayout = JSON.parse(data);
 					for (const group of editorLayout) {
