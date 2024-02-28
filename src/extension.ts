@@ -108,6 +108,31 @@ export function activate(context: vscode.ExtensionContext) {
 				vscode.window.showInformationMessage('Windows exported to ' + filePath);
 			});
 		}),
+
+		vscode.commands.registerCommand('extension.importWindows', async () => {
+			const filePath = path.join(vscode.workspace.rootPath || '', 'windows.json');
+			fs.readFile(filePath, { encoding: 'utf8' }, async (error, data) => {
+				if (error) {
+					vscode.window.showErrorMessage(`Error importing windows: ${error.message}`);
+					return;
+				}
+				try {
+					const editorLayout = JSON.parse(data);
+					for (const group of editorLayout) {
+						for (const editor of group.editors) {
+							// Megnyitja az összes fájlt, amelyek információi a JSON-ban szerepelnek
+							if (editor.resource) {
+								const document = await vscode.workspace.openTextDocument(vscode.Uri.parse(editor.resource));
+								await vscode.window.showTextDocument(document, { preview: editor.isPreview, viewColumn: group.viewColumn });
+							}
+						}
+					}
+					vscode.window.showInformationMessage('Windows imported successfully.');
+				} catch (error: any) {
+					vscode.window.showErrorMessage(`Error parsing windows JSON: ${error.message}`);
+				}
+			});
+		}),
 		
 		// =========================================
 		// Create new task

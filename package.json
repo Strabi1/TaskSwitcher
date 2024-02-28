@@ -30,6 +30,10 @@
 				"title": "Export Windows"
 			},
 			{
+				"command": "extension.importWindows",
+				"title": "Import Windows"
+			},
+			{
 				"command": "extension.createNewTask",
 				"title": "Create New Task"
 			},
