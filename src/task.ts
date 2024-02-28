@@ -10,9 +10,21 @@ export type Breakpoint = {
 	condition: string
 }
 
+export type Editor = {
+	label: string,
+	resource: string,
+	isPreview: boolean
+}
+
+export type EditorGroups = {
+	viewColumn: number,
+	editors: Editor[]
+}
+
 export type Task = {
 	task: string,
-	breakPoints: Breakpoint[]
+	breakPoints: Breakpoint[],
+	editorGroups: EditorGroups[]
 }
 
 export class Tasks {
@@ -63,7 +75,8 @@ export class Tasks {
 		else {
 			const newTask: Task = {
 				task: taskName,
-				breakPoints: []
+				breakPoints: [],
+				editorGroups: []
 			};
 
 			this.tasks.push(newTask) ;
@@ -77,29 +90,25 @@ export class Tasks {
 	}
 
 	exportBreakPoints(task: Task, breakPoints: Breakpoint[] | any) {
-		task.breakPoints = breakPoints;
-		this.writeTasksToFile();
+		if(breakPoints) {
+			task.breakPoints = breakPoints;
+			this.writeTasksToFile();
+		}
 	}
 
 	importBreakPoint(task: Task): Breakpoint[] | undefined {
 		return task.breakPoints;
 	}
 
-	exportEditors(taskName: string, editors: Editor[] | any) {
-		const taskIndex = this.tasks.findIndex(task => task.task === taskName);
-
-		if (taskIndex !== -1) 
-			this.tasks[taskIndex].editors = editors;
-
-
-		this.writeTasksToFile();
+	exportEditors(task: Task, editorGroups: EditorGroups[] | any) {
+		if(editorGroups) {
+			task.editorGroups = editorGroups;
+			this.writeTasksToFile();
+		}
 	}
 
-	importEditors(taskName: string): Editor[] | undefined {
-		const taskIndex = this.tasks.findIndex(task => task.task === taskName);
-
-		if (taskIndex !== -1) 
-			return this.tasks[taskIndex].editors;
+	importEditors(task: Task): EditorGroups[] | undefined {
+		return task.editorGroups;
 	}
 
 	taskExists(taskName: string): boolean {
