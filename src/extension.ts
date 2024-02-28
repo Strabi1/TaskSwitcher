@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as tasks from './task'
-import { isAnyArrayBuffer } from 'util/types';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -29,15 +28,9 @@ export function activate(context: vscode.ExtensionContext) {
 		// Export breakpoints
 		// =========================================
 		vscode.commands.registerCommand('extension.exportBreakpoints', async() => {
-			// const picks = myTasks.getTasks().map(task => ({ label: task.task }));
-
-			// const selected = await vscode.window.showQuickPick(picks, {
-			// 	placeHolder: 'Choose a task',
-			// });
-
-			const selected = await selectTask('Choose a task');
+			const selectedTask = await selectTask('Choose a task');
 	
-			if (selected) {
+			if (selectedTask) {
 				const breakpoints = vscode.debug.breakpoints;
 				const breakpointsData = breakpoints.map(bp => {
 					if (bp instanceof vscode.SourceBreakpoint) {
@@ -53,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 					} 
 				}).filter(Boolean);
 
-				myTasks.exportBreakPoints(selected.label, breakpointsData) 
+				myTasks.exportBreakPoints(selectedTask, breakpointsData) 
 			}
 		}),
 		
@@ -61,14 +54,10 @@ export function activate(context: vscode.ExtensionContext) {
 		// Import breakpoints
 		// =========================================
 		vscode.commands.registerCommand('extension.importBreakpoints', async () => {
-			const picks = myTasks.getTasks().map(task => ({ label: task.task }));
-
-			const selected = await vscode.window.showQuickPick(picks, {
-				placeHolder: 'Choose a task',
-			});
+			const selectedTask = await selectTask('Choose a task');
 	
-			if (selected) {
-				const breakp = myTasks.importBreakPoint(selected.label);
+			if (selectedTask) {
+				const breakp = myTasks.importBreakPoint(selectedTask);
 
 				const breakpoints = breakp?.map((bp: any) => {
 					return new vscode.SourceBreakpoint(new vscode.Location(vscode.Uri.file(bp.path), new vscode.Position(bp.line, 0)), bp.enabled);
@@ -157,30 +146,30 @@ export function activate(context: vscode.ExtensionContext) {
 		// Delete task
 		// =========================================
 		vscode.commands.registerCommand('extension.deleteTask', async () => {
-			const picks = myTasks.getTasks().map(task => ({ label: task.task }));
-
-			const selected = await vscode.window.showQuickPick(picks, {
-				placeHolder: 'Deleted task',
-			});
-
-			if (selected) {
+			const selectedTask = await selectTask('Task to be deleted');
+			
+			if (selectedTask) {
 				const result = await vscode.window.showInformationMessage(
 					'Are you sure you want to delete task?', { modal: true }, 'Yes');
 					
 					if (result === 'Yes')
-						myTasks.deleteTask(selected.label);
+						myTasks.deleteTask(selectedTask);
 			}
 		})
 	);
 
-	async function selectTask(placeHolder: string): Promise<{label: string} | undefined> {
-		const picks = myTasks.getTasks().map(task => ({ label: task.task }));
+	async function selectTask(placeHolder: string): Promise<tasks.Task | undefined> {
+		const allTask = myTasks.getTasks();
+		const picks = allTask.map(task => ({ label: task.task }));
 
-		const selected = await vscode.window.showQuickPick(picks, {
+		const selectedTask = await vscode.window.showQuickPick(picks, {
 			placeHolder: placeHolder,
 		});
 
-		return selected;
+		if(selectedTask)
+			return allTask.find(task => task.task === selectedTask.label);
+
+		return undefined;
 	}
 
 }

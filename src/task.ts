@@ -71,30 +71,35 @@ export class Tasks {
 		}
 	}
 
-	deleteTask(taskName: string) {
-		const taskIndex = this.tasks.findIndex(task => task.task === taskName);
-
-		if (taskIndex !== -1) {
-			this.tasks.splice(taskIndex, 1);
-			this.writeTasksToFile();
-		}
+	deleteTask(taskToDelete: Task) {
+		this.tasks = this.tasks.filter(task => task.task !== taskToDelete.task);
+		this.writeTasksToFile();
 	}
 
-	exportBreakPoints(taskName: string, breakPoints: Breakpoint[] | any) {
+	exportBreakPoints(task: Task, breakPoints: Breakpoint[] | any) {
+		task.breakPoints = breakPoints;
+		this.writeTasksToFile();
+	}
+
+	importBreakPoint(task: Task): Breakpoint[] | undefined {
+		return task.breakPoints;
+	}
+
+	exportEditors(taskName: string, editors: Editor[] | any) {
 		const taskIndex = this.tasks.findIndex(task => task.task === taskName);
 
 		if (taskIndex !== -1) 
-			this.tasks[taskIndex].breakPoints = breakPoints;
+			this.tasks[taskIndex].editors = editors;
 
 
 		this.writeTasksToFile();
 	}
 
-	importBreakPoint(taskName: string): Breakpoint[] | undefined {
+	importEditors(taskName: string): Editor[] | undefined {
 		const taskIndex = this.tasks.findIndex(task => task.task === taskName);
 
 		if (taskIndex !== -1) 
-			return this.tasks[taskIndex].breakPoints;
+			return this.tasks[taskIndex].editors;
 	}
 
 	taskExists(taskName: string): boolean {
