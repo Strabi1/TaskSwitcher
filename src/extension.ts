@@ -78,6 +78,36 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			}
 		}),
+
+
+		vscode.commands.registerCommand('extension.exportWindows', () => {
+			const editors = vscode.window.visibleTextEditors;
+			const editorGroups = vscode.window.tabGroups.all;
+	
+			const editorLayout = editorGroups.map(group => {
+				return {
+					viewColumn: group.viewColumn,
+					editors: group.tabs.map(tab => {
+						// Feltételezve, hogy minden input rendelkezik uri-val, ami lehet nem mindig igaz
+						const inputUri = (tab.input as any)?.uri?.toString();
+						return {
+							label: tab.label,
+							resource: inputUri,
+							isPreview: tab.isPreview
+						};
+					})
+				};
+			});
+	
+			const filePath = path.join(vscode.workspace.rootPath || '', 'windows.json');
+			fs.writeFile(filePath, JSON.stringify(editorLayout, null, 2), (err) => {
+				if (err) {
+					vscode.window.showErrorMessage('Error exporting windows: ' + err.message);
+					return;
+				}
+				vscode.window.showInformationMessage('Windows exported to ' + filePath);
+			});
+		}),
 		
 		// =========================================
 		// Create new task

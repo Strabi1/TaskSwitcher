@@ -26,6 +26,10 @@
 				"title": "Import Breakpoints"
 			},
 			{
+				"command": "extension.exportWindows",
+				"title": "Export Windows"
+			},
+			{
 				"command": "extension.createNewTask",
 				"title": "Create New Task"
 			},
