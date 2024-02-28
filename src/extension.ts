@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// =========================================
 		// Export breakpoints
 		// =========================================
-		vscode.commands.registerCommand('extension.exportBreakpoints', async() => {
+		vscode.commands.registerCommand('taskswitcher.exportBreakpoints', async() => {
 			const selectedTask = await selectTask('Choose a task');
 	
 			if (selectedTask) {
@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// =========================================
 		// Import breakpoints
 		// =========================================
-		vscode.commands.registerCommand('extension.importBreakpoints', async() => {
+		vscode.commands.registerCommand('taskswitcher.importBreakpoints', async() => {
 			const selectedTask = await selectTask('Choose a task');
 	
 			if (selectedTask) {
@@ -74,7 +74,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// =========================================
 		// Export editors
 		// =========================================
-		vscode.commands.registerCommand('extension.exportWindows', async() => {
+		vscode.commands.registerCommand('taskswitcher.exportEditors', async() => {
 			const selectedTask = await selectTask('Choose a task');
 	
 			if (selectedTask) {
@@ -104,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// =========================================
 		// Import editors
 		// =========================================
-		vscode.commands.registerCommand('extension.importWindows', async() => {
+		vscode.commands.registerCommand('taskswitcher.importEditors', async() => {
 			const selectedTask = await selectTask('Choose a task');
 	
 			if (selectedTask) {
@@ -115,7 +115,6 @@ export function activate(context: vscode.ExtensionContext) {
 				if(editorGroups) {
 					for (const group of editorGroups) {
 						for (const editor of group.editors) {
-							// Megnyitja az összes fájlt, amelyek információi a JSON-ban szerepelnek
 							if (editor.resource) {
 								const document = await vscode.workspace.openTextDocument(vscode.Uri.parse(editor.resource));
 								await vscode.window.showTextDocument(document, { preview: editor.isPreview, viewColumn: group.viewColumn });
@@ -124,38 +123,12 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				}
 			}
-
-			// const filePath = path.join(vscode.workspace.rootPath || '', 'windows.json');
-			// fs.readFile(filePath, { encoding: 'utf8' }, async (error, data) => {
-			// 	if (error) {
-			// 		vscode.window.showErrorMessage(`Error importing windows: ${error.message}`);
-			// 		return;
-			// 	}
-
-			// 	await vscode.commands.executeCommand('workbench.action.closeAllEditors');
-
-			// 	try {
-			// 		const editorLayout = JSON.parse(data);
-			// 		for (const group of editorLayout) {
-			// 			for (const editor of group.editors) {
-			// 				// Megnyitja az összes fájlt, amelyek információi a JSON-ban szerepelnek
-			// 				if (editor.resource) {
-			// 					const document = await vscode.workspace.openTextDocument(vscode.Uri.parse(editor.resource));
-			// 					await vscode.window.showTextDocument(document, { preview: editor.isPreview, viewColumn: group.viewColumn });
-			// 				}
-			// 			}
-			// 		}
-			// 		vscode.window.showInformationMessage('Windows imported successfully.');
-			// 	} catch (error: any) {
-			// 		vscode.window.showErrorMessage(`Error parsing windows JSON: ${error.message}`);
-			// 	}
-			// });
 		}),
 		
 		// =========================================
 		// Create new task
 		// =========================================
-		vscode.commands.registerCommand('extension.createNewTask', async() => {
+		vscode.commands.registerCommand('taskswitcher.createNewTask', async() => {
 			const userInput = await vscode.window.showInputBox({
 				prompt: 'Enter the name of the task!',
 				placeHolder: 'Task name'
@@ -168,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// =========================================
 		// Delete task
 		// =========================================
-		vscode.commands.registerCommand('extension.deleteTask', async() => {
+		vscode.commands.registerCommand('taskswitcher.deleteTask', async() => {
 			const selectedTask = await selectTask('Task to be deleted');
 			
 			if (selectedTask) {

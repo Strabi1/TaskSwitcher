@@ -18,27 +18,27 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.exportBreakpoints",
+				"command": "taskswitcher.exportBreakpoints",
 				"title": "Export Breakpoints"
 			},
 			{
-				"command": "extension.importBreakpoints",
+				"command": "taskswitcher.importBreakpoints",
 				"title": "Import Breakpoints"
 			},
 			{
-				"command": "extension.exportWindows",
-				"title": "Export Windows"
+				"command": "taskswitcher.exportEditors",
+				"title": "Export Editors"
 			},
 			{
-				"command": "extension.importWindows",
-				"title": "Import Windows"
+				"command": "taskswitcher.importEditors",
+				"title": "Import Editors"
 			},
 			{
-				"command": "extension.createNewTask",
+				"command": "taskswitcher.createNewTask",
 				"title": "Create New Task"
 			},
 			{
-				"command": "extension.deleteTask",
+				"command": "taskswitcher.deleteTask",
 				"title": "Delete Task"
 			}
 		]
