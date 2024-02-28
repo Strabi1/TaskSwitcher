@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as tasks from './task'
+import { isAnyArrayBuffer } from 'util/types';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -28,11 +29,13 @@ export function activate(context: vscode.ExtensionContext) {
 		// Export breakpoints
 		// =========================================
 		vscode.commands.registerCommand('extension.exportBreakpoints', async() => {
-			const picks = myTasks.getTasks().map(task => ({ label: task.task }));
+			// const picks = myTasks.getTasks().map(task => ({ label: task.task }));
 
-			const selected = await vscode.window.showQuickPick(picks, {
-				placeHolder: 'Choose a task',
-			});
+			// const selected = await vscode.window.showQuickPick(picks, {
+			// 	placeHolder: 'Choose a task',
+			// });
+
+			const selected = await selectTask('Choose a task');
 	
 			if (selected) {
 				const breakpoints = vscode.debug.breakpoints;
@@ -169,6 +172,18 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		})
 	);
+
+	async function selectTask(placeHolder: string): Promise<{label: string} | undefined> {
+		const picks = myTasks.getTasks().map(task => ({ label: task.task }));
+
+		const selected = await vscode.window.showQuickPick(picks, {
+			placeHolder: placeHolder,
+		});
+
+		return selected;
+	}
+
 }
+
 
 export function deactivate() {}
