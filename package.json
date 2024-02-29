@@ -1,8 +1,10 @@
 {
 	"name": "taskswitcher",
-	"displayName": "TaskSwitcher",
-	"description": "",
-	"version": "1.1.0",
+	"displayName": "Task Switcher",
+	"description": "Export and re-import of the development environment (e.g. breakpoints, open editors)",
+	"publisher": "Stráhl Balázs",
+	"icon": "resources/icon.png",
+	"version": "1.1.1",
 	"engines": {
 		"vscode": "^1.42.0"
 	},
