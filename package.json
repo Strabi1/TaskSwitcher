@@ -2,7 +2,7 @@
 	"name": "taskswitcher",
 	"displayName": "Task Switcher",
 	"description": "Export and re-import of the development environment (e.g. breakpoints, open editors)",
-	"publisher": "Stráhl Balázs",
+	"publisher": "StrahlBalazs",
 	"icon": "resources/icon.png",
 	"version": "1.1.1",
 	"engines": {
