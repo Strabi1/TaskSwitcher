@@ -15,3 +15,7 @@
 ## v1.1.2
 
 - Modify README.md and CHANGELOG.md
+
+## v1.1.3
+
+- Modify README.md
