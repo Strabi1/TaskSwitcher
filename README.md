@@ -11,5 +11,7 @@ Contains the
 - Delete Task
 - Import Breakpoints
 - Export Breakpoints
+- Import Editors
+- Export Editors
 
 commands

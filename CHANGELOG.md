@@ -1,9 +1,17 @@
 # Change Log
 
-All notable changes to the "taskswitcher" extension will be documented in this file.
+## v1.0.0
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- Import and export breakpoints
 
-## [Unreleased]
+## v1.1.0
 
-- Initial release
+- Added features for import and export editors
+
+## v1.1.1
+
+- Add icon, publisher and description
+
+## v1.1.2
+
+- Modify README.md and CHANGELOG.md
