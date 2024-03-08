@@ -19,3 +19,11 @@
 ## v1.1.3
 
 - Modify README.md
+
+## v1.1.4
+
+- Add gifs to README.md
+
+## v1.1.5
+
+- Modify CHANGELOG.md
